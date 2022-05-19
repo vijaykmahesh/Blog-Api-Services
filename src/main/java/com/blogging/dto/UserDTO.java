@@ -2,6 +2,11 @@ package com.blogging.dto;
 
 import java.util.Date;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
+import org.hibernate.validator.constraints.Length;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -14,15 +19,21 @@ public class UserDTO {
 	private Long userId;
 
 	@JsonProperty("userName")
+	@NotBlank(message = "userName cannot be empty")
+	@Length(min = 5, max = 150)
 	private String userName;
 
 	@JsonProperty("dateOfBirth")
+	@NotBlank
 	private Date dateOfBirth;
 
 	@JsonProperty("email")
+	@Email
 	private String email;
 
 	@JsonProperty("password")
+	@NotBlank(message = "password cannot be empty")
+	@Length(min = 5, max = 150)
 	private String password;
 
 	@JsonProperty("about")

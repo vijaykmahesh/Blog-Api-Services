@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.blogging.dto.UserDTO;
 import com.blogging.exceptions.DataNotFoundException;
 import com.blogging.exceptions.DuplicateDataException;
+import com.blogging.exceptions.ErrorWhileUpdatingException;
 import com.blogging.model.User;
 import com.blogging.repository.UserRepository;
 import com.blogging.service.UserService;
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	UserRepository userRepository; 
+	
 
 	@Override
 	public UserDTO createUser(UserDTO userDTO) {
@@ -44,5 +46,35 @@ public class UserServiceImpl implements UserService {
 		}
 		else
 			return UserObjectMapping.toUserDTO(isExist.get());
+	}
+
+
+	@Override
+	public UserDTO UpdateUser(UserDTO userDto, Long userId) {
+		Optional<User> userOpt = userRepository.findById(userId);
+		if(userOpt.isPresent()) {
+			User user =  UserObjectMapping.toUser(userDto);
+			user.setDateOfBirth(userDto.getDateOfBirth());
+			user.setAbout(userDto.getAbout());
+			User savedUser =  userRepository.save(user);
+			if(savedUser!=null) {
+				return UserObjectMapping.toUserDTO(savedUser);
+			}
+			else
+				throw new ErrorWhileUpdatingException("Error while updating user");
+		}
+		else
+			throw new DataNotFoundException("user not found with" +userId);
+	}
+
+
+	@Override
+	public void deleteUser(Long userId) {
+		Optional<User> userOpt = userRepository.findById(userId);
+		if(userOpt.isPresent()) {
+			userRepository.delete(userOpt.get());
+		}
+		else
+			throw new DataNotFoundException("user not found with "+userId);
 	}
 }
