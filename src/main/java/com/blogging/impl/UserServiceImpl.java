@@ -1,11 +1,13 @@
 package com.blogging.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.blogging.dto.UserDTO;
+import com.blogging.dto.UserDetailsDTO;
 import com.blogging.exceptions.DataNotFoundException;
 import com.blogging.exceptions.DuplicateDataException;
 import com.blogging.exceptions.ErrorWhileUpdatingException;
@@ -50,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	public UserDTO UpdateUser(UserDTO userDto, Long userId) {
+	public UserDTO updateUser(UserDTO userDto, Long userId) {
 		Optional<User> userOpt = userRepository.findById(userId);
 		if(userOpt.isPresent()) {
 			User user =  UserObjectMapping.toUser(userDto);
@@ -76,5 +78,16 @@ public class UserServiceImpl implements UserService {
 		}
 		else
 			throw new DataNotFoundException("user not found with "+userId);
+	}
+
+
+	@Override
+	public UserDetailsDTO getPostsByUserId(Long userId) {
+		Optional<User> userOpt = userRepository.findById(userId);
+		if(userOpt.isPresent()) {
+			return UserObjectMapping.toUserDetailsDTO(userOpt.get());
+		}
+		else
+			throw new DataNotFoundException("no posts found for user with "+userId);
 	}
 }

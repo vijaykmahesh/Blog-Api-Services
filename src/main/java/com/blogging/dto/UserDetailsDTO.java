@@ -1,6 +1,7 @@
 package com.blogging.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -8,13 +9,9 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "userId", "userName", "dateOfBirth", "email", "password", "about" })
-public class UserDTO {
+public class UserDetailsDTO {
 
 	@JsonProperty("userId")
 	private Long userId;
@@ -32,13 +29,12 @@ public class UserDTO {
 	@Email(message = "enter valid emailId")
 	private String email;
 
-	@JsonProperty("password")
-	private String password;
-
 	@JsonProperty("about")
 	private String about;
-
 	
+	@JsonProperty("postDtos")
+	private List<PostDTO> postDtos;
+
 	public Long getUserId() {
 		return userId;
 	}
@@ -71,14 +67,6 @@ public class UserDTO {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getAbout() {
 		return about;
 	}
@@ -86,5 +74,15 @@ public class UserDTO {
 	public void setAbout(String about) {
 		this.about = about;
 	}
+
+	public List<PostDTO> getPostDtos() {
+		return postDtos;
+	}
+
+	public void setPostDtos(List<PostDTO> postDtos) {
+		this.postDtos = postDtos;
+	}
+	
+	
 
 }

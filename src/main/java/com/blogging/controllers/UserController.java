@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blogging.dto.UserDTO;
+import com.blogging.dto.UserDetailsDTO;
 import com.blogging.service.UserService;
 
 @RestController
@@ -33,7 +34,7 @@ public class UserController {
 	public UserDTO updateUser(@RequestBody UserDTO userDTO, @RequestParam(name = "userId") Long userId) {
 
 		log.info("Start : updateUser");
-		return userService.UpdateUser(userDTO, userId);
+		return userService.updateUser(userDTO, userId);
 	}
 
 	@RequestMapping(value = { "/getUserById" }, method = { RequestMethod.GET }, produces = "application/json")
@@ -41,6 +42,14 @@ public class UserController {
 
 		log.info("Start : getUserById");
 		return userService.getUserById(userId);
+
+	}
+	
+	@RequestMapping(value = { "/getPostsByUserId" }, method = { RequestMethod.GET }, produces = "application/json")
+	public UserDetailsDTO getPostsByUserId(@RequestParam(name = "userId") Long userId) {
+
+		log.info("Start : getPostsByUserId");
+		return userService.getPostsByUserId(userId);
 
 	}
 
