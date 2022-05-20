@@ -1,6 +1,5 @@
 package com.blogging.impl;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,75 +18,63 @@ import com.blogging.utils.UserObjectMapping;
 @Service
 public class UserServiceImpl implements UserService {
 
-	
 	@Autowired
-	UserRepository userRepository; 
-	
+	UserRepository userRepository;
 
 	@Override
 	public UserDTO createUser(UserDTO userDTO) {
-		Optional<User> isExist =  userRepository.findByUserNameIgnoreCase(userDTO.getUserName());
-		if(isExist.isPresent()) {
+		Optional<User> isExist = userRepository.findByUserNameIgnoreCase(userDTO.getUserName());
+		if (isExist.isPresent()) {
 			throw new DuplicateDataException("username already exist");
-		}
-		else {
+		} else {
 			User userConverted = UserObjectMapping.toUser(userDTO);
-			System.out.println("user obj-----------"+userConverted);
+			System.out.println("user obj-----------" + userConverted);
 			userConverted = userRepository.save(userConverted);
 			return UserObjectMapping.toUserDTO(userConverted);
 		}
 	}
 
-
 	@Override
 	public UserDTO getUserById(Long userId) {
-		Optional<User> isExist =  userRepository.findById(userId);
-		
-		if(isExist.isPresent()) {
-			throw new DataNotFoundException("User Not Found For"+userId);
-		}
-		else
+		Optional<User> isExist = userRepository.findById(userId);
+
+		if (isExist.isPresent()) {
+			throw new DataNotFoundException("User Not Found For" + userId);
+		} else
 			return UserObjectMapping.toUserDTO(isExist.get());
 	}
-
 
 	@Override
 	public UserDTO updateUser(UserDTO userDto, Long userId) {
 		Optional<User> userOpt = userRepository.findById(userId);
-		if(userOpt.isPresent()) {
-			User user =  UserObjectMapping.toUser(userDto);
+		if (userOpt.isPresent()) {
+			User user = UserObjectMapping.toUser(userDto);
 			user.setDateOfBirth(userDto.getDateOfBirth());
 			user.setAbout(userDto.getAbout());
-			User savedUser =  userRepository.save(user);
-			if(savedUser!=null) {
+			User savedUser = userRepository.save(user);
+			if (savedUser != null) {
 				return UserObjectMapping.toUserDTO(savedUser);
-			}
-			else
+			} else
 				throw new ErrorWhileUpdatingException("Error while updating user");
-		}
-		else
-			throw new DataNotFoundException("user not found with" +userId);
+		} else
+			throw new DataNotFoundException("user not found with" + userId);
 	}
-
 
 	@Override
 	public void deleteUser(Long userId) {
 		Optional<User> userOpt = userRepository.findById(userId);
-		if(userOpt.isPresent()) {
+		if (userOpt.isPresent()) {
 			userRepository.delete(userOpt.get());
-		}
-		else
-			throw new DataNotFoundException("user not found with "+userId);
+		} else
+			throw new DataNotFoundException("user not found with " + userId);
 	}
-
 
 	@Override
 	public UserDetailsDTO getPostsByUserId(Long userId) {
 		Optional<User> userOpt = userRepository.findById(userId);
-		if(userOpt.isPresent()) {
+		if (userOpt.isPresent()) {
 			return UserObjectMapping.toUserDetailsDTO(userOpt.get());
-		}
-		else
-			throw new DataNotFoundException("no posts found for user with "+userId);
+		} else
+			throw new DataNotFoundException("no posts found for user with " + userId);
 	}
 }

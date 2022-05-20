@@ -3,9 +3,11 @@ package com.blogging.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.blogging.dto.CategoryDetailsDTO;
 import com.blogging.dto.PostDTO;
 import com.blogging.dto.UserDTO;
 import com.blogging.dto.UserDetailsDTO;
+import com.blogging.model.Category;
 import com.blogging.model.Posts;
 import com.blogging.model.User;
 
@@ -62,5 +64,7 @@ public class UserObjectMapping {
 
 		return postDTOs;
 	}
+
+	
 
 }
